@@ -8,17 +8,28 @@
 import Foundation
 
 struct LaunchesPast: Decodable {
-    let flight_number: Int
-    let mission_name: String
-    let launch_date_local: String
-    let launch_site: LaunchSite
+    let flightNumber: Int
+    let missionName: String
+    let launchDateLocal: String
+    let launchSuccess: Bool?
+    let details: String?
+    let launchSite: LaunchSite
     let links: Links
+    let launchFailureDetails: LaunchFailureDetails?
 }
 
 struct LaunchSite: Decodable {
-    let site_name: String
+    let siteName: String
 }
 
 struct Links: Decodable {
-    let mission_patch: String?
+    let missionPatch: String?
+    let flickrImages: [String?]
+    let youtubeId: String?
+    let wikipedia: String?
+}
+
+struct LaunchFailureDetails: Decodable {
+    let time: Int
+    let reason: String
 }

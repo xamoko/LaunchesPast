@@ -18,13 +18,36 @@ class LaunchesPadViewModel {
     weak var launchProtocolLaunchesPast: LaunchesPastProtocol?
     
     func gettingDatasLaunchesPast(){
+        let defaults = UserDefaults.standard
+        
+        let savedArray = defaults.object(forKey: "SavedArray") as! String
+        guard savedArray.isEmpty else {
+
+            do{
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+              let launchesPastDatas: [LaunchesPast] = try decoder.decode([LaunchesPast].self, from: savedArray.data(using: .utf8) ?? Data())
+              self.launchProtocolLaunchesPast?.launchGettingDatas(datas: launchesPastDatas)
+              }
+            catch let error {
+                print(error)
+            }
+            
+            return
+        }
+        
         AF.request(URLAPI, method: .get).response { response in
             let data = response.data
             guard let json: String = String(data: data ?? Data(), encoding: String.Encoding.utf8) else {
                 return
             }
             do {
-                let launchesPastDatas: [LaunchesPast] = try JSONDecoder().decode([LaunchesPast].self, from: json.data(using: .utf8) ?? Data())
+                defaults.set(json, forKey: "SavedArray")
+                let savedArray = defaults.object(forKey: "SavedArray") as! String
+                let decoder = JSONDecoder()
+                  decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let launchesPastDatas: [LaunchesPast] = try decoder.decode([LaunchesPast].self, from: savedArray.data(using: .utf8) ?? Data())
+
                 self.launchProtocolLaunchesPast?.launchGettingDatas(datas: launchesPastDatas)
                 
             } catch let error {

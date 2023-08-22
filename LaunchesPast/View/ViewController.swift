@@ -17,7 +17,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .lightGray
         self.title = "Space X 🚀"
         addTable()
         self.datasDelegate.gettingDatasLaunchesPast()
@@ -31,27 +31,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.delegate = self
         tableView.separatorColor = UIColor.clear
         tableView.estimatedRowHeight = UITableView.automaticDimension
-        
+        tableView.backgroundColor = .lightGray
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
-        tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
+        tableView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
+        tableView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.datasLaunches.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: myCell, for: indexPath) as! LaunchesDetailTableViewCell
         
-        cell.launchLabel.text = "\(self.datasLaunches[indexPath.row].mission_name)"
-        cell.siteName.text = "\(self.datasLaunches[indexPath.row].launch_site.site_name)"
-        cell.launchDateLocal.text = "\(self.datasLaunches[indexPath.row].launch_date_local)"
+        cell.launchLabel.text = "\(self.datasLaunches[indexPath.row].missionName)"
+        cell.siteName.text = "\(self.datasLaunches[indexPath.row].launchSite.siteName)"
         
-        let missionPatch:String = self.datasLaunches[indexPath.row].links.mission_patch ?? ""
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+
+        let date: Date? = dateFormatterGet.date(from: self.datasLaunches[indexPath.row].launchDateLocal)
+        
+        cell.launchDateLocal.text = dateFormatter.string(from: date!)
+        
+        let missionPatch:String = self.datasLaunches[indexPath.row].links.missionPatch ?? ""
         
         if let urlImages = URL(string: missionPatch) {
             let imageResource = KF.ImageResource(downloadURL: urlImages, cacheKey: missionPatch)
@@ -62,22 +71,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         cell.accessoryType = .disclosureIndicator
         
-        let margins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        let margins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
         let red = UIColor(red: 96.0/255.0, green: 96.0/255.0, blue: 96.0/255.0, alpha: 1.0)
         cell.backgroundColor = UIColor(red: 250.0/255.0, green: 250.0/255.0, blue: 250.0/255.0, alpha: 1)
         cell.layer.borderColor = red.cgColor
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 8
-        cell.contentView.frame = cell.contentView.frame.inset(by: margins)
 
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let launchesDetail = details()
-        launchesDetail.titleLaunches = "\(self.datasLaunches[indexPath.row].mission_name)"
+        let launchesDetail = LaunchesPastDetail()
+        launchesDetail.titleLaunches = "\(self.datasLaunches[indexPath.row].missionName)"
+        let datasLaunch = self.datasLaunches[indexPath.row].links
+        launchesDetail.launchData = self.datasLaunches[indexPath.row].links.flickrImages
+        launchesDetail.launchDetails = self.datasLaunches[indexPath.row]
         self.navigationController?.pushViewController(launchesDetail, animated: true)
         
     }
