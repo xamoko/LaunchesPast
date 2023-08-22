@@ -21,7 +21,7 @@ class LaunchesPadViewModel {
         let defaults = UserDefaults.standard
         
         let savedArray = defaults.object(forKey: "SavedArray") as! String
-        guard savedArray.isEmpty else {
+        guard !savedArray.isEmpty else {
 
             do{
                 let decoder = JSONDecoder()
