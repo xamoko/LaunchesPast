@@ -29,6 +29,7 @@ class LaunchesPastDetail: UIViewController {
         let reasonLabel = UILabel()
         reasonLabel.font = UIFont.boldSystemFont(ofSize: 20)
         reasonLabel.numberOfLines = 3
+        reasonLabel.textColor = .black
         reasonLabel.translatesAutoresizingMaskIntoConstraints = false
         return reasonLabel
     }()
@@ -37,6 +38,7 @@ class LaunchesPastDetail: UIViewController {
         let detailLabel = UILabel()
         detailLabel.font = UIFont.systemFont(ofSize: 20)
         detailLabel.numberOfLines = 10
+        detailLabel.textColor = .black
         detailLabel.translatesAutoresizingMaskIntoConstraints = false
         return detailLabel
     }()

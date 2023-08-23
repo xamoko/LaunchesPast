@@ -70,6 +70,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         cell.accessoryType = .disclosureIndicator
+        cell.tintColor = .black
         
         let margins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         

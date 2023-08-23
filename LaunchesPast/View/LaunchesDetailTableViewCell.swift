@@ -12,16 +12,19 @@ class LaunchesDetailTableViewCell: UITableViewCell {
     
     lazy var launchLabel: UILabel = {
        let launchLabel = UILabel()
+        launchLabel.textColor = .black
         return launchLabel
     }()
     
     lazy var siteName: UILabel = {
        let siteName = UILabel()
+        siteName.textColor = .black
         return siteName
     }()
     
     lazy var launchDateLocal: UILabel = {
        let launchDateLocal = UILabel()
+        launchDateLocal.textColor = .black
         return launchDateLocal
     }()
     
