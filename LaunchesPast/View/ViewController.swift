@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import FirebaseAuth
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -19,9 +20,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         view.backgroundColor = .lightGray
         self.title = "Space X 🚀"
+        self.navigationItem.setHidesBackButton(true, animated: true)
+        manageNavigationbar()
         addTable()
         self.datasDelegate.gettingDatasLaunchesPast()
         self.datasDelegate.launchProtocolLaunchesPast = self
+    }
+    
+    func manageNavigationbar(){
+        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.trash, target: self, action: #selector(signOut))
+        navigationItem.rightBarButtonItem = button
+    }
+    
+    @objc func signOut(){
+        do {
+            try Auth.auth().signOut()
+            let VC = Authenticate()
+            navigationController?.pushViewController(VC, animated: true)
+        } catch {
+            
+        }
     }
 
     func addTable() {

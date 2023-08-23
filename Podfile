@@ -5,5 +5,6 @@ target 'LaunchesPast' do
 
   use_frameworks!
   pod 'FirebaseAnalytics'
+  pod 'FirebaseAuth'
 
 end
